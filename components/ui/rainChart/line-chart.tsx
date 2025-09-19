@@ -122,7 +122,7 @@ export default function ChartLineDots() {
         <CardTitle>Chance Of Rain</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-80">
+        <div className="h-80 md:h-53">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={data}
