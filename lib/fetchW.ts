@@ -8,6 +8,7 @@ export type WeatherResponse = {
     humidity: number;
     wind_kph: number;
     precip_mm: number;
+    pressure_mb: number;
   condition: {
     text: string;
     icon: string;
@@ -22,13 +23,18 @@ export type WeatherResponse = {
           icon: string
         }
       };
+      astro: {
+        sunset: string;
+        sunrise: string;
+      }
       hour: {
         time: string;
         temp_c: number;
         condition: {
           icon: string
           text: string
-        }
+        };
+        feelslike_c: number
       }[];
     }[];
   };
