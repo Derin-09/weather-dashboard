@@ -88,11 +88,9 @@
 
 
 
-
-
-
 "use client"
 
+import React, { useEffect, useState } from "react"
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -102,20 +100,61 @@ import {
   Tooltip,
   Bar,
   Line,
-  Scatter
+  Scatter,
 } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/rainChart/card"
+import { fetchWeather } from "@/lib/fetchW"
 
-const data = [
-  { time: "10AM", weather: "Rainy", value: 8 },
-  { time: "11AM", weather: "Sunny", value: 10 },
-  { time: "12PM", weather: "Heavy", value: 15 },
-  { time: "1PM", weather: "Sunny", value: 5 },
-  { time: "2PM", weather: "Heavy", value: 14 },
-  { time: "3PM", weather: "Rainy", value: 6 },
-]
+type HourlyData = {
+  time: string
+  rainChance: number
+  temp: number
+  humidity: number
+}
+// type WeatherHour = {
+//   time: string
+//   chance_of_rain: number
+//   temp_c: number
+//   humidity: number
+// }
+
+type WeatherHour = {
+  time: string
+  chance_of_rain: number
+  temp_c: number
+  humidity?: number
+  condition: {
+    icon: string
+    text: string
+  }
+  feelslike_c: number
+}
+
 
 export default function ChartLineDots() {
+  const [data, setData] = useState<HourlyData[]>([])
+
+  useEffect(() => {
+    const getWeather = async () => {
+      try {
+        const res = await fetchWeather("Lagos") // or whatever city
+        if (res?.forecast?.forecastday?.[0]?.hour) {
+          const hours: WeatherHour[] = res.forecast.forecastday[0].hour.slice(0, 8) // grab first 8 hours
+          const formatted = hours.map((h) => ({
+            time: h.time.split(" ")[1], // "2025-09-21 14:00" -> "14:00"
+            rainChance: h.chance_of_rain,
+            temp: h.temp_c,
+            humidity: h.humidity ?? 0,
+          }))
+          setData(formatted)
+        }
+      } catch (err) {
+        console.error("Weather fetch failed:", err)
+      }
+    }
+    getWeather()
+  }, [])
+
   return (
     <Card className="w-full max-w-lg bg-[#111015] text-white z-0">
       <CardHeader>
@@ -129,18 +168,13 @@ export default function ChartLineDots() {
               margin={{ top: 0, right: -10, left: -30, bottom: 20 }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-
-              {/* time along X-axis */}
               <XAxis dataKey="time" tick={{ fill: "#aaa" }} />
+              <YAxis tick={{ fill: "#aaa" }} />
+              <Tooltip />
 
-              {/* numeric values on Y-axis */}
-              <YAxis  tick={{ fill: "#aaa" }} />
-
-              <Tooltip formatter={(val, name, props) => [`${val}`, `Value (${props.payload.weather})`]} />
-
-              <Bar dataKey="value" fill="#4FC3F7" barSize={6} radius={[10, 10, 0, 0]} />
-              <Line type="monotone" dataKey="value" stroke="#90CAF9" strokeWidth={2} dot={false} />
-              <Scatter dataKey="value" fill="#fff" />
+              <Bar dataKey="rainChance" fill="#4FC3F7" barSize={6} radius={[10, 10, 0, 0]} />
+              <Line type="monotone" dataKey="temp" stroke="#90CAF9" strokeWidth={2} dot={false} />
+              <Scatter dataKey="humidity" fill="#fff" />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
@@ -148,6 +182,157 @@ export default function ChartLineDots() {
     </Card>
   )
 }
+
+
+
+
+
+
+
+
+// "use client"
+
+// import {
+//   ResponsiveContainer,
+//   ComposedChart,
+//   XAxis,
+//   YAxis,
+//   CartesianGrid,
+//   Tooltip,
+//   Bar,
+//   Line,
+//   Scatter
+// } from "recharts"
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/rainChart/card"
+// import { useEffect, useState } from "react"
+// import { fetchWeather, WeatherResponse } from "@/lib/fetchW"
+
+// export default function ChartLineDots() {
+//   const [chartData, setChartData] = useState<
+//     { time: string; weather: string; value: number }[]
+//   >([])
+
+//   useEffect(() => {
+//     const getData = async () => {
+//       try {
+//         // call your fetchWeather with a city string or coords
+//         const res = await fetchWeather("Beijing")
+//         if (!res) return
+
+//         // API gives forecast array, so shape it into chart’s format
+//         const hourly = res.forecast.forecastday[0].hour.slice(8, 15) // example: 8AM - 3PM
+//         const shaped = hourly.map((h) => ({
+//           time: new Date(h.time).toLocaleTimeString([], { hour: "numeric" }),
+//           weather: h.condition.text,
+//           value: h.chance_of_rain ?? h.temp_c, // whatever you want plotted
+//         }))
+
+//         setChartData(shaped)
+//       } catch (err) {
+//         console.error("weather fetch fail:", err)
+//       }
+//     }
+
+//     getData()
+//   }, [])
+
+//   return (
+//     <Card className="w-full max-w-lg bg-[#111015] text-white z-0">
+//       <CardHeader>
+//         <CardTitle>Chance Of Rain</CardTitle>
+//       </CardHeader>
+//       <CardContent>
+//         <div className="h-80 md:h-53">
+//           <ResponsiveContainer width="100%" height="100%">
+//             <ComposedChart
+//               data={chartData}
+//               margin={{ top: 0, right: -10, left: -30, bottom: 20 }}
+//             >
+//               <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+
+//               <XAxis dataKey="time" tick={{ fill: "#aaa" }} />
+//               <YAxis tick={{ fill: "#aaa" }} />
+
+//               <Tooltip
+//                 formatter={(val, _name, props) => [
+//                   `${val}`,
+//                   `(${props.payload.weather})`,
+//                 ]}
+//               />
+
+//               <Bar dataKey="value" fill="#4FC3F7" barSize={6} radius={[10, 10, 0, 0]} />
+//               <Line type="monotone" dataKey="value" stroke="#90CAF9" strokeWidth={2} dot={false} />
+//               <Scatter dataKey="value" fill="#fff" />
+//             </ComposedChart>
+//           </ResponsiveContainer>
+//         </div>
+//       </CardContent>
+//     </Card>
+//   )
+// }
+
+
+
+
+
+
+// "use client"
+
+// import {
+//   ResponsiveContainer,
+//   ComposedChart,
+//   XAxis,
+//   YAxis,
+//   CartesianGrid,
+//   Tooltip,
+//   Bar,
+//   Line,
+//   Scatter
+// } from "recharts"
+// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/rainChart/card"
+
+// const data = [
+//   { time: "10AM", weather: "Rainy", value: 8 },
+//   { time: "11AM", weather: "Sunny", value: 10 },
+//   { time: "12PM", weather: "Heavy", value: 15 },
+//   { time: "1PM", weather: "Sunny", value: 5 },
+//   { time: "2PM", weather: "Heavy", value: 14 },
+//   { time: "3PM", weather: "Rainy", value: 6 },
+// ]
+
+// export default function ChartLineDots() {
+//   return (
+//     <Card className="w-full max-w-lg bg-[#111015] text-white z-0">
+//       <CardHeader>
+//         <CardTitle>Chance Of Rain</CardTitle>
+//       </CardHeader>
+//       <CardContent>
+//         <div className="h-80 md:h-53">
+//           <ResponsiveContainer width="100%" height="100%">
+//             <ComposedChart
+//               data={data}
+//               margin={{ top: 0, right: -10, left: -30, bottom: 20 }}
+//             >
+//               <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+
+//               {/* time along X-axis */}
+//               <XAxis dataKey="time" tick={{ fill: "#aaa" }} />
+
+//               {/* numeric values on Y-axis */}
+//               <YAxis  tick={{ fill: "#aaa" }} />
+
+//               <Tooltip formatter={(val, name, props) => [`${val}`, `Value (${props.payload.weather})`]} />
+
+//               <Bar dataKey="value" fill="#4FC3F7" barSize={6} radius={[10, 10, 0, 0]} />
+//               <Line type="monotone" dataKey="value" stroke="#90CAF9" strokeWidth={2} dot={false} />
+//               <Scatter dataKey="value" fill="#fff" />
+//             </ComposedChart>
+//           </ResponsiveContainer>
+//         </div>
+//       </CardContent>
+//     </Card>
+//   )
+// }
 
 
 

@@ -2,19 +2,8 @@
 import NextDaysCards from '@/components/ui/forecast/NextDaysCards'
 import { useLocation } from '@/hooks/LocationFetcher'
 import { fetchWeather, WeatherResponse } from '@/lib/fetchW'
-import { Cloud, CloudHail, CloudRainIcon, Rainbow, Sun, SunDim, Wind } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
-// import  SwiperSlide from 'swiper'
 
-const Days = [
-    {day: 'SUN', icon: Cloud, temp: 19},
-    {day: 'MON', icon: CloudHail, temp: 19},
-    {day: 'TUE', icon: Sun, temp: 19},
-    {day: 'WED', icon: CloudRainIcon, temp: 19},
-    {day: 'THUR', icon: Wind, temp: 19},
-    {day: 'FRI', icon: Rainbow, temp: 19},
-    {day: 'SAT', icon: SunDim, temp: 19},
-]
 
 const NextDays = () => {
     const [isActive, setIsActive] = useState(true)

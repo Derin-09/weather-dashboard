@@ -1,5 +1,5 @@
 import ForecastCards from '@/components/ui/forecast/ForecastCards'
-import { Cloud, CloudHail } from 'lucide-react'
+import { CloudHail } from 'lucide-react'
 import React from 'react'
 
 const Tomorrow = () => {

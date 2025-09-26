@@ -5,7 +5,6 @@ import Forecast from "@/components/sections/mobile/Forecast/Forecast";
 import OtherCities from "@/components/sections/mobile/OtherCities";
 import Overview from "@/components/sections/mobile/Overview";
 import RainChance from "@/components/sections/mobile/RainChance";
-import Image from "next/image";
 
 export default function Home() {
   return (

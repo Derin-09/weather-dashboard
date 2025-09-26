@@ -2,7 +2,6 @@
 import ForecastCards from '@/components/ui/forecast/ForecastCards'
 import { useLocation } from '@/hooks/LocationFetcher'
 import { fetchWeather, WeatherResponse } from '@/lib/fetchW'
-import { Cloud } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
 const Today = () => {

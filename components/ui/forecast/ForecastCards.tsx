@@ -1,6 +1,6 @@
 import { LucideIcon } from 'lucide-react';
-import Image, { StaticImageData } from 'next/image';
-import React, { ElementType } from 'react'
+import Image from 'next/image';
+import React from 'react'
 
 type ForecastType = {
     day: string;
@@ -16,7 +16,6 @@ type ForecastType = {
 }
 
 const ForecastCards = ({props}: {props: ForecastType}) => {
-    const Icon = props.weatherIcon
   return (
     <div className='rounded-2xl overflow-hidden text-[#0F0F11]'>
         <div className='flex justify-between px-4 py-2 bg-[#AECADF]'>
@@ -30,12 +29,11 @@ const ForecastCards = ({props}: {props: ForecastType}) => {
             </div>
             <div className='fle fle-col grid grid-cols-2  text-[12px]'>
                 <p>Real Feel: <span className='font-bold'>{props.realFeel}&deg;</span></p>
-                {/* <div className='grid grid-cols-2  justify-between'> */}
                 <p className='flex\ nowrap'>Wind N-E: <span className='font-bold'>{props.wind}</span></p>
                 <p className='tet-right'>Pressure: <span className='font-bold'>{props.pressure}</span></p>
                 <p >Humidity: <span className='font-bold'>{props.humidity}</span></p>
                 <p className='tet-right'>Sunrise: <span className='font-bold'>{props.sunrise}</span></p>
-                {/* </div> */}
+             
                 <p>Sunset: <span className='font-bold'>{props.sunset}</span></p>
             </div>
         </div>

@@ -1,5 +1,4 @@
 import React from 'react'
-import Banner from '@/public/images/banner.jpg'
 
 const Explore = () => {
   return (

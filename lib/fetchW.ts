@@ -9,6 +9,9 @@ export type WeatherResponse = {
     wind_kph: number;
     precip_mm: number;
     pressure_mb: number;
+    uv: number;
+    vis_km: number;
+    dewpoint_c: number;
   condition: {
     text: string;
     icon: string;
@@ -30,6 +33,7 @@ export type WeatherResponse = {
       hour: {
         time: string;
         temp_c: number;
+        chance_of_rain: number
         condition: {
           icon: string
           text: string

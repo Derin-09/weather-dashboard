@@ -19,7 +19,7 @@ const OverviewCard = ({props, children}: {props: OverviewTypes, children:ReactNo
         <div className='flex justify-center items-center'>
             <Icon size={70}/>
         </div>
-        <div className='flex justify-between'>
+        <div className='flex justify-between items-center'>
             <p> <span className='font-semibold'>{props.status}</span> {props.unit}</p>
             <div>{children}</div>
         </div>

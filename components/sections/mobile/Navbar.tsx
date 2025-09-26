@@ -1,5 +1,4 @@
 'use client'
-import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link';
@@ -79,7 +78,7 @@ const Navbar = () => {
                 <div className='hidden md:block p-3 bg-[#1E1E1E] rounded-full hover:bg-gray-600'>
                     <Moon />
                 </div>
-                <div className='hidden md:block p-3 bg-[#1E1E1E] rounded-full hover:bg-gray-600'>
+                <div className='hidden md:block p-3 bg-[#1E1E1E] rounded-full hover:bg-gray-600 hover:cursor-pointer'>
                     <User />
                 </div>
             </div>
