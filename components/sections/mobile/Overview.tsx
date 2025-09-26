@@ -44,7 +44,7 @@ const Overview = () => {
     {
       title: 'Wind Status',
       icon: Tornado,
-      status: weather?.current.wind_kph,
+      status: weather?.current.wind_kph ?? 0,
       unit: 'km/h',
       comment: {
         cString: '',
@@ -56,7 +56,7 @@ const Overview = () => {
     {
       title: 'UV Index',
       icon: Gauge,
-      status: weather?.current.uv,
+      status: weather?.current.uv ?? 0,
       unit: 'UV',
       comment: {
         cString: null,
@@ -68,7 +68,7 @@ const Overview = () => {
     {
       title: 'Humidity',
       icon: CloudDrizzle,
-      status: weather?.current.humidity,
+      status: weather?.current.humidity ?? 0,
       unit: '%',
       comment: {
         cString: `The dew point is 27° right now`,
@@ -80,7 +80,7 @@ const Overview = () => {
     {
       title: 'Visibility',
       icon: Wind,
-      status: weather?.current.vis_km,
+      status: weather?.current.vis_km ?? 0,
       unit: 'km',
       comment: {
         cString: 'Haze is affecting visibiity',
