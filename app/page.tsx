@@ -17,11 +17,12 @@ export default function Home() {
         <OtherCities />
       </div>
 
-      <div className="md:grid grid-cols-5 px-6 gap-6 hidden pb-6">
+      {/* Desktop grid: centered container, progressively tighter gaps at larger widths */}
+      <div className="hidden md:grid grid-cols-5 px-4 md:px-6 pb-6 max-w-screen-2xl mx-auto w-full gap-6 lg:gap-4 xl:gap-3 2xl:gap-2 place-items-stretch">
         <div className="col-span-4 items-stretch">
           <GridOne />
         </div>
-        <div className="col-span-1">
+        <div className="col-span-1  md:pl-4">
           <GridTwo />
         </div>
       </div>

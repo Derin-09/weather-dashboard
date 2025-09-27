@@ -15,7 +15,14 @@ type ForecastType = {
     sunset: string
 }
 
+function normalizeIconUrl(url: string) {
+  if (/^https?:\/\//.test(url) || url.startsWith('data:')) return url
+  if (url.startsWith('//')) return `https:${url}`
+  return url.startsWith('/') ? url : `https://${url}`
+}
+
 const ForecastCards = ({props}: {props: ForecastType}) => {
+  const isStringIcon = typeof props.weatherIcon === 'string'
   return (
     <div className='rounded-2xl overflow-hidden text-[#0F0F11]'>
         <div className='flex justify-between px-4 py-2 bg-[#AECADF]'>
@@ -25,7 +32,13 @@ const ForecastCards = ({props}: {props: ForecastType}) => {
         <div className='p-4 bg-[#BBD7EC] space-y-2'>
             <div className='flex items-center justify-between pt-0'>
                 <p className='text-4xl font-bold'>{props.degree}&deg;</p>
-                <div><Image src={`https://${props.weatherIcon}`}  width={66} height={66} alt=''/></div>
+                <div>
+                  {isStringIcon ? (
+                    <Image src={normalizeIconUrl(props.weatherIcon as string)} width={66} height={66} alt='' />
+                  ) : (
+                    (() => { const Icon = props.weatherIcon as LucideIcon; return <Icon size={66} /> })()
+                  )}
+                </div>
             </div>
             <div className='fle fle-col grid grid-cols-2  text-[12px]'>
                 <p>Real Feel: <span className='font-bold'>{props.realFeel}&deg;</span></p>

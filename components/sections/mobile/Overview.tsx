@@ -46,7 +46,7 @@ const Overview = () => {
       icon: CloudDrizzle,
       status: weather?.current.humidity ?? 0,
       unit: '%',
-      comment: { cString: `The dew point is 27° right now`, cNumber: weather?.current.dewpoint_c, cIcon: Droplets },
+      comment: { cString: `The dew point is` + ' ' + weather?.current.dewpoint_c +  '°' + ' ' + `right now` , cNumber: weather?.current.dewpoint_c, cIcon: Droplets },
     },
     {
       title: 'Visibility',

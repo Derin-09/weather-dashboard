@@ -9,14 +9,19 @@ type OverviewTypes = {
 
 }
 
+function normalizeIconUrl(url: string) {
+  if (/^https?:\/\//.test(url) || url.startsWith('data:')) return url
+  if (url.startsWith('//')) return `https:${url}`
+  return url.startsWith('/') ? url : `https://${url}`
+}
+
 const OtherCitiesCard = ({props}: {props: OverviewTypes}) => {
-    // const Icon = props.icon
   return (
     <div className='flex flex-col gap-  px-4 py-2 rounded-xl bg-[#1E1E1E]'>
         <p className='text-sm text-[#818085]'>{props.country}</p>
         <div className='flex justify-between items-center'>
             <p className='text-xl'>{props.city}</p>
-            <Image src={`https://${props.icon}`} width={40} height={40} alt=''/>
+            <Image src={normalizeIconUrl(props.icon)} width={40} height={40} alt=''/>
         </div>
         <div className='text-sm'>
             <p> {props.weather}</p>

@@ -25,6 +25,7 @@ export type WeatherResponse = {
         condition: {
           icon: string
         }
+        maxwind_kph: number
       };
       astro: {
         sunset: string;
@@ -34,6 +35,8 @@ export type WeatherResponse = {
         time: string;
         temp_c: number;
         chance_of_rain: number
+        pressure_mb: number
+        humidity: number
         condition: {
           icon: string
           text: string

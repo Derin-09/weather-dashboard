@@ -1,23 +1,65 @@
+'use client'
 import ForecastCards from '@/components/ui/forecast/ForecastCards'
-import { CloudHail } from 'lucide-react'
-import React from 'react'
+import Skeleton from '@/components/ui/skeleton'
+import { useLocation } from '@/hooks/LocationFetcher'
+import { useWeatherQuery } from '@/hooks/useWeatherQuery'
+import { fetchWeather, WeatherResponse } from '@/lib/fetchW'
+import React, { useEffect, useState } from 'react'
 
 const Tomorrow = () => {
+  const { locationLat, locationLon } = useLocation()
+  const { query } = useWeatherQuery()
+  const [weather, setWeather] = useState<WeatherResponse | null>(null)
+
+  useEffect(() => {
+    const getWeather = async () => {
+      const param = query ?? (locationLat && locationLon ? { lat: locationLat, lon: locationLon } : null)
+      if (!param) return
+      try {
+        const res = await fetchWeather(param)
+        setWeather(res)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    getWeather()
+  }, [locationLat, locationLon, query])
   return (
     <div className=''>
-            <ForecastCards props={{
-                day: 'Saturday',
-                time: '11:45 AM',
-                degree: 26,
-                weatherIcon: CloudHail,
-                realFeel: 18,
-                wind: '6-7km/h',
-                pressure: 100,
-                humidity: 51,
-                sunrise: '5:30 PM',
-                sunset: '6:45 PM'
-
-            }} />
+          {weather ? (
+                  <ForecastCards
+                    props={{
+                      day: new Date().toLocaleDateString('en-US', { weekday: 'long' }),
+                      time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+                      degree: weather.forecast.forecastday[1].day.avgtemp_c,
+                      weatherIcon: weather.forecast.forecastday[1].day.condition.icon,
+                      realFeel: weather.forecast.forecastday[1].hour[1].feelslike_c,
+                      wind: `${weather.forecast.forecastday[1].day.maxwind_kph} km/h`,
+                      pressure: weather.forecast.forecastday[1].hour[1].pressure_mb,
+                      humidity: weather.forecast.forecastday[1].hour[1].humidity,
+                      sunrise: weather.forecast.forecastday[1].astro.sunrise,
+                      sunset: weather.forecast.forecastday[1].astro.sunset,
+                    }}
+                  />
+                ) : (
+                  <div className='rounded-2xl overflow-hidden text-[#0F0F11]'>
+                    <div className='flex justify-between px-4 py-2 bg-[#2A2A2A]'>
+                      <Skeleton className='h-4 w-24' />
+                      <Skeleton className='h-4 w-16' />
+                    </div>
+                    <div className='p-4 bg-[#1E1E1E] space-y-4'>
+                      <div className='flex items-center justify-between pt-0'>
+                        <Skeleton className='h-10 w-20 rounded-md' />
+                        <Skeleton className='h-16 w-16 rounded-full' />
+                      </div>
+                      <div className='grid grid-cols-2 gap-2 text-[12px]'>
+                        {Array.from({ length: 6 }).map((_, i) => (
+                          <Skeleton key={i} className='h-4 w-28' />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
         </div>
   )
 }
