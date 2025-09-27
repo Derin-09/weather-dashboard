@@ -16,8 +16,8 @@ const Forecast = () => {
   return (
     <section>
         <div className='flex space-y-6 justify-between'>
-            <p onClick={handleToday} className={` ${ isToday ? 'text-white' : 'text-[#818085]'}`}>Today</p>
-            <p onClick={handleTomorrow} className={` ${ !isToday ? 'text-white' : 'text-[#818085]'}`}>Tomorrow</p>
+            <p onClick={handleToday} className={` ${ isToday ? 'text-white' : 'text-[#818085]'} hover:cursor-pointer`}>Today</p>
+            <p onClick={handleTomorrow} className={` ${ !isToday ? 'text-white' : 'text-[#818085]'} hover:cursor-pointer`}>Tomorrow</p>
         </div>
         { isToday && <Today/>}
         { !isToday && <Tomorrow/>}

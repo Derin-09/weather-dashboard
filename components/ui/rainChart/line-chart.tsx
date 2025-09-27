@@ -103,33 +103,36 @@ import {
   Scatter,
 } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/rainChart/card"
+import Skeleton from "@/components/ui/skeleton"
 import { fetchWeather } from "@/lib/fetchW"
+
+const CAT_LABELS = ["Heavy", "Sunny", "Rainy"] as const
+
+type Category = typeof CAT_LABELS[number]
 
 type HourlyData = {
   time: string
-  rainChance: number
-  temp: number
-  humidity: number
+  cat: Category
+  catIndex: number // 0=Heavy (bottom), 1=Sunny, 2=Rainy (top)
+  value: number // chance of rain for vertical bars
 }
-// type WeatherHour = {
-//   time: string
-//   chance_of_rain: number
-//   temp_c: number
-//   humidity: number
-// }
 
 type WeatherHour = {
   time: string
   chance_of_rain: number
   temp_c: number
   humidity?: number
-  condition: {
-    icon: string
-    text: string
-  }
+  condition: { icon: string; text: string }
   feelslike_c: number
 }
 
+function categorize(h: WeatherHour): Category {
+  const text = h.condition.text?.toLowerCase() || ""
+  const cor = h.chance_of_rain ?? 0
+  if (text.includes("heavy") || cor >= 70) return "Heavy"
+  if (text.includes("rain") || cor >= 30) return "Rainy"
+  return "Sunny"
+}
 
 export default function ChartLineDots() {
   const [data, setData] = useState<HourlyData[]>([])
@@ -137,15 +140,19 @@ export default function ChartLineDots() {
   useEffect(() => {
     const getWeather = async () => {
       try {
-        const res = await fetchWeather("Lagos") // or whatever city
+        const res = await fetchWeather("Lagos")
         if (res?.forecast?.forecastday?.[0]?.hour) {
-          const hours: WeatherHour[] = res.forecast.forecastday[0].hour.slice(0, 8) // grab first 8 hours
-          const formatted = hours.map((h) => ({
-            time: h.time.split(" ")[1], // "2025-09-21 14:00" -> "14:00"
-            rainChance: h.chance_of_rain,
-            temp: h.temp_c,
-            humidity: h.humidity ?? 0,
-          }))
+          const hours: WeatherHour[] = res.forecast.forecastday[0].hour.slice(0, 8)
+          const formatted = hours.map((h) => {
+            const cat = categorize(h)
+            const catIndex = CAT_LABELS.indexOf(cat) // Heavy=0, Sunny=1, Rainy=2
+            return {
+              time: h.time.split(" ")[1],
+              cat,
+              catIndex,
+              value: h.chance_of_rain ?? 0,
+            }
+          })
           setData(formatted)
         }
       } catch (err) {
@@ -155,6 +162,8 @@ export default function ChartLineDots() {
     getWeather()
   }, [])
 
+  const isLoading = data.length === 0
+
   return (
     <Card className="w-full max-w-lg bg-[#111015] text-white z-0">
       <CardHeader>
@@ -162,21 +171,53 @@ export default function ChartLineDots() {
       </CardHeader>
       <CardContent>
         <div className="h-80 md:h-53">
-          <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart
-              data={data}
-              margin={{ top: 0, right: -10, left: -30, bottom: 20 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-              <XAxis dataKey="time" tick={{ fill: "#aaa" }} />
-              <YAxis tick={{ fill: "#aaa" }} />
-              <Tooltip />
+          {isLoading ? (
+            <Skeleton className="h-full w-full rounded-xl" />
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart data={data} margin={{ top: 8, right: 10, left: 0, bottom: 16 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                {/* X axis = time labels */}
+                <XAxis dataKey="time" tick={{ fill: "#aaa" }} />
 
-              <Bar dataKey="rainChance" fill="#4FC3F7" barSize={6} radius={[10, 10, 0, 0]} />
-              <Line type="monotone" dataKey="temp" stroke="#90CAF9" strokeWidth={2} dot={false} />
-              <Scatter dataKey="humidity" fill="#fff" />
-            </ComposedChart>
-          </ResponsiveContainer>
+                {/* Left Y axis = categorical levels used by the line (0..2) */}
+                <YAxis
+                  yAxisId="cat"
+                  type="number"
+                  domain={[0, 2]}
+                  ticks={[0, 1, 2]}
+                  tickFormatter={(v) => CAT_LABELS[v as 0 | 1 | 2]}
+                  tick={{ fill: "#aaa" }}
+                />
+
+                {/* Right Y axis = numeric for bar heights (hidden) */}
+                <YAxis yAxisId="val" orientation="right" type="number" domain={[0, 100]} hide />
+
+                <Tooltip
+                  formatter={(val: any, name: any, ctx: any) => {
+                    if (name === "catIndex") return [CAT_LABELS[val as 0 | 1 | 2], ctx.payload?.time]
+                    if (name === "value") return [val + "%", "Chance"]
+                    return [val, name]
+                  }}
+                  labelFormatter={(label) => label}
+                />
+
+                {/* Thin vertical bars (chance of rain) */}
+                <Bar yAxisId="val" dataKey="value" fill="#CFEAFE" barSize={6} radius={[10, 10, 0, 0]} />
+
+                {/* Smooth line across categorical Y levels */}
+                <Line
+                  yAxisId="cat"
+                  type="monotone"
+                  dataKey="catIndex"
+                  stroke="#90CAF9"
+                  strokeWidth={2}
+                  dot={{ r: 3, stroke: "#90CAF9", fill: "#fff" }}
+                  activeDot={{ r: 4 }}
+                />
+              </ComposedChart>
+            </ResponsiveContainer>
+          )}
         </div>
       </CardContent>
     </Card>

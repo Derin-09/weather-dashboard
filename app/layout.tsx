@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import {Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/sections/mobile/Navbar";
+import { WeatherQueryProvider } from "@/hooks/useWeatherQuery";
 
 const MontserratFont = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
 });
-
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,13 +21,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${MontserratFont.variable} antialiased bg-[#111015] text-[#FEFEFE]`}
-      >
-        <div className="sticky inset-0">
-        <Navbar />
-        </div>
-        {children}
+      <body className={`${MontserratFont.variable} antialiased bg-[#111015] text-[#FEFEFE]`}>
+        <WeatherQueryProvider>
+          <div className="sticky inset-0">
+            <Navbar />
+          </div>
+          {children}
+        </WeatherQueryProvider>
       </body>
     </html>
   );

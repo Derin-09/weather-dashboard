@@ -25,7 +25,7 @@ const ForecastCards = ({props}: {props: ForecastType}) => {
         <div className='p-4 bg-[#BBD7EC] space-y-2'>
             <div className='flex items-center justify-between pt-0'>
                 <p className='text-4xl font-bold'>{props.degree}&deg;</p>
-                <div><Image src={`https:${props.weatherIcon}`}  width={66} height={66} alt=''/></div>
+                <div><Image src={`https://${props.weatherIcon}`}  width={66} height={66} alt=''/></div>
             </div>
             <div className='fle fle-col grid grid-cols-2  text-[12px]'>
                 <p>Real Feel: <span className='font-bold'>{props.realFeel}&deg;</span></p>
