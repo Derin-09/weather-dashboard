@@ -23,11 +23,4 @@ export function LocationFetcher() {
   }, [])
 
   return { locationLon: location?.lon, locationLat: location?.lat}
-//    (
-//     <div>
-//       {location 
-//         ? <p>Lat: {location.lat}, Lon: {location.lon}</p>
-//         : <p>Getting location...</p>}
-//     </div>
-//   )
 }

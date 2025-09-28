@@ -52,19 +52,6 @@ const API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY
 const BASE_URL = 'https://api.weatherapi.com/v1/forecast.json'
 
 
-// export const fetchWeather = async (city: string): Promise<WeatherResponse | null> => {
-//     try {
-//         const res = await fetch(`${BASE_URL}?key=${API_KEY}&q=${city}&days=7&aqi=no&alerts=no`)
-//         const data = await res.json()
-//         return data
-//     } 
-//     catch (err) {
-//         console.log(err)
-//         return null
-//     }
-// }
-
-
 export const fetchWeather = async (
   query: string | { lat: number; lon: number }
 ): Promise<WeatherResponse | null> => {

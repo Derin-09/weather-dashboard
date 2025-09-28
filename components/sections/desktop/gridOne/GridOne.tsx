@@ -16,9 +16,7 @@ const GridOne = () => {
         <p className='py-4'>Today&apos;s Overview</p>
         <div className='flex gap-4 lg:gap-3 xl:gap-4 2xl:gap-1'>
             <Overview />
-            {/* <div className='pt-6'> */}
             <Explore />
-            {/* </div> */}
         </div>
     </section>
   )

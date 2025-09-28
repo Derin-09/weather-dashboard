@@ -17,7 +17,7 @@ export default function Home() {
         <OtherCities />
       </div>
 
-      {/* Desktop grid: centered container, progressively tighter gaps at larger widths */}
+      {/* Desktop view */}
       <div className="hidden md:grid grid-cols-5 px-4 md:px-6 pb-6 max-w-screen-2xl mx-auto w-full gap-6 lg:gap-4 xl:gap-3 2xl:gap-2 place-items-stretch">
         <div className="col-span-4 items-stretch">
           <GridOne />

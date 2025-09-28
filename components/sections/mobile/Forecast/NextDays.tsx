@@ -14,7 +14,7 @@ const NextDays = () => {
   const [weather, setWeather] = useState<WeatherResponse | null>(null)
   const weekdayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
-  const days = weather?.forecast?.forecastday ?? []
+  const days = useMemo(() => weather?.forecast?.forecastday ?? [], [weather])
   const placeholders = useMemo(() => Math.max(0, 7 - days.length), [days])
 
   useEffect(() => {

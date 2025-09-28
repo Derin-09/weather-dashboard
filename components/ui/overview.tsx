@@ -6,8 +6,6 @@ type OverviewTypes = {
     icon: LucideIcon
     status: number
     unit: string
-    // commentString: string
-    // commentNumber: number
 
 }
 
