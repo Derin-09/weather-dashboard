@@ -6,12 +6,12 @@ A modern, responsive weather dashboard built with Next.js and TypeScript. Get re
 
 ## Features
 
-- 🌡️ **Real-time Weather Data** - Current conditions, forecasts, and weather metrics
-- 📱 **Responsive Design** - Works seamlessly on mobile, tablet, and desktop
-- 🎨 **Modern UI** - Beautiful, clean interface with smooth animations
-- 📊 **Data Visualization** - Interactive charts and graphs powered by Recharts
-- ⚡ **Fast Performance** - Optimized with Next.js 15 and React 19
-- 🎯 **TypeScript** - Fully typed codebase for better developer experience
+- **Real-time Weather Data** - Current conditions, forecasts, and weather metrics
+- **Responsive Design** - Works seamlessly on mobile, tablet, and desktop
+- **Modern UI** - Beautiful, clean interface with smooth animations
+- **Data Visualization** - Interactive charts and graphs powered by Recharts
+- **Fast Performance** - Optimized with Next.js 15 and React 19
+- **TypeScript** - Fully typed codebase for better developer experience
 
 ## Tech Stack
 
