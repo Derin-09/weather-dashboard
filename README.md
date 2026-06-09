@@ -13,6 +13,8 @@ A modern, responsive weather dashboard built with Next.js and TypeScript. Get re
 - **Fast Performance** - Optimized with Next.js 15 and React 19
 - **TypeScript** - Fully typed codebase for better developer experience
 
+![Screenshot](./public/images/dashboard-image.png)
+
 ## Tech Stack
 
 - **Framework:** [Next.js 15.5.3](https://nextjs.org/)
